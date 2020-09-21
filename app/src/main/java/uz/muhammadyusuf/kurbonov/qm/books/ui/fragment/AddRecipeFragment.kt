@@ -9,6 +9,7 @@ import android.widget.MultiAutoCompleteTextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import uz.muhammadyusuf.kurbonov.qm.books.R
@@ -30,25 +31,36 @@ class AddRecipeFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentAddRecipeBinding.bind(view)
 
-        val ingredientsList = listOf(
-            "Potato",
-            "Tomato",
-            "Onion",
-            "Cucumber",
-            "Apple",
-            "Banana",
-            "Nok",
-            "Shaftoli",
-            "Carrot",
-            "Milk"
-        )
-        val adapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1)
-        adapter.addAll(ingredientsList)
-        binding.evIngredients.setAdapter(adapter)
+        lifecycleScope.launch {
+            val ingredientsList = mutableListOf(
+                "Potato",
+                "Tomato",
+                "Onion",
+                "Cucumber",
+                "Apple",
+                "Banana",
+                "Nok",
+                "Shaftoli",
+                "Carrot",
+                "Milk"
+            )
+            model.repository.getAllDataDirect().forEach {
+                ingredientsList.addAll(it.ingredients.map { ingredient ->
+                    ingredient.trim()
+                })
+            }
+            val newIngredientsList = ingredientsList.distinct()
+            ingredientsList.clear()
+            ingredientsList.addAll(newIngredientsList)
+            val adapter =
+                ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1)
+            adapter.addAll(ingredientsList)
+            binding.evIngredients.setAdapter(adapter)
+        }
         binding.evIngredients.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
 
         binding.btnCancel.setOnClickListener {
-            model.navController.popBackStack()
+            model.goHomFragment()
         }
         binding.btnSave.setOnClickListener {
             model.viewModelScope.launch {
@@ -63,7 +75,7 @@ class AddRecipeFragment : DialogFragment() {
                     )
                 )
             }
-            model.navController.popBackStack()
+            model.goHomFragment()
         }
     }
 
