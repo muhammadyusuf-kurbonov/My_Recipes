@@ -1,11 +1,15 @@
 package uz.muhammadyusuf.kurbonov.qm.books.viewmodel.main
 
+import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
+import kotlinx.coroutines.flow.Flow
 import uz.muhammadyusuf.kurbonov.qm.books.database.recipes.RecipeModel
 import uz.muhammadyusuf.kurbonov.qm.books.viewmodel.base.BaseRepository
 
 interface MainRepository : BaseRepository {
-    suspend fun getAllData(): List<RecipeModel>
+    fun getAllData(): Flow<RecipeModel>
+
+    suspend fun getAllDataDirect(): List<RecipeModel>
 
     suspend fun getPagedList(): PagingSource<Int, RecipeModel>
 
@@ -14,4 +18,6 @@ interface MainRepository : BaseRepository {
     suspend fun update(recipeModel: RecipeModel)
 
     suspend fun getRecipe(id: Int): RecipeModel
+
+    fun listenAllData(): LiveData<List<RecipeModel>>
 }

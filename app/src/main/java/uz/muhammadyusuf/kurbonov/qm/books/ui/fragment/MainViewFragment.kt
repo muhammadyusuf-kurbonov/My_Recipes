@@ -3,9 +3,8 @@ package uz.muhammadyusuf.kurbonov.qm.books.ui.fragment
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
@@ -23,7 +22,7 @@ import uz.muhammadyusuf.kurbonov.qm.books.viewmodel.main.MainViewModel
  */
 class MainViewFragment : Fragment(R.layout.fragment_main_view) {
 
-    private val viewModel by viewModels<MainViewModel>()
+    private val viewModel by activityViewModels<MainViewModel>()
 
     companion object {
         private const val TAG = "MainFragment"
@@ -32,31 +31,24 @@ class MainViewFragment : Fragment(R.layout.fragment_main_view) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = MainListAdapter()
-
-        viewModel.initDatabase(requireContext())
-        viewModel.generateFakeData()
-
         val binding = FragmentMainViewBinding.bind(view)
 
-        binding.mainList.layoutManager = LinearLayoutManager(requireContext(), VERTICAL, false)
+        val linearLayoutManager = LinearLayoutManager(requireContext(), VERTICAL, false)
+        binding.mainList.layoutManager = linearLayoutManager
         binding.mainList.adapter = adapter
         binding.mainList.requestLayout()
 
 
         lifecycleScope.launch {
             Log.d(TAG, "launched coroutine for paging data load")
-            adapter.submitList(viewModel.repository.getAllData())
+            viewModel.repository.listenAllData().observe(viewLifecycleOwner) {
+                adapter.submitList(it)
+            }
         }
 
 
-        binding.btnManualTest.setOnClickListener {
-            lifecycleScope.launch {
-                val data = viewModel.repository.getAllData()
-                Toast.makeText(requireContext(), "Size of data is ${data.size}", Toast.LENGTH_SHORT)
-                    .show()
-
-                adapter.notifyDataSetChanged()
-            }
+        binding.floatingActionButton.setOnClickListener {
+            viewModel.navController.navigate(R.id.addRecipeFragment)
         }
     }
 }

@@ -5,8 +5,8 @@ import androidx.room.TypeConverter
 class TypeConverters {
 
     @TypeConverter
-    fun listToString(list: List<String>): String = list.joinToString(";")
+    fun listToString(list: List<String>): String = list.joinToString(",")
 
     @TypeConverter
-    fun stringToList(str: String): List<String> = str.split(";")
+    fun stringToList(str: String): List<String> = str.split(",")
 }

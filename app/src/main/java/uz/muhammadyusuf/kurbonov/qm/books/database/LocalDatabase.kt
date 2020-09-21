@@ -1,9 +1,11 @@
 package uz.muhammadyusuf.kurbonov.qm.books.database
 
+import androidx.lifecycle.LiveData
 import androidx.paging.PagingSource
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import kotlinx.coroutines.flow.Flow
 import uz.muhammadyusuf.kurbonov.qm.books.database.recipes.RecipeDao
 import uz.muhammadyusuf.kurbonov.qm.books.database.recipes.RecipeModel
 import uz.muhammadyusuf.kurbonov.qm.books.viewmodel.main.MainRepository
@@ -14,7 +16,10 @@ import uz.muhammadyusuf.kurbonov.qm.books.database.TypeConverters as TypeConvert
 abstract class LocalDatabase : MainRepository, RoomDatabase() {
     abstract fun recipeDao(): RecipeDao
 
-    override suspend fun getAllData(): List<RecipeModel> =
+    override fun getAllData(): Flow<RecipeModel> =
+        recipeDao().getAllData()
+
+    override suspend fun getAllDataDirect(): List<RecipeModel> =
         recipeDao().getAllDirect()
 
     override suspend fun getPagedList(): PagingSource<Int, RecipeModel> =
@@ -28,6 +33,9 @@ abstract class LocalDatabase : MainRepository, RoomDatabase() {
 
     override suspend fun getRecipe(id: Int): RecipeModel =
         recipeDao().getRecipe(id)
+
+    override fun listenAllData(): LiveData<List<RecipeModel>> =
+        recipeDao().listenAllData()
 
     override fun closeConnection() {
         close()

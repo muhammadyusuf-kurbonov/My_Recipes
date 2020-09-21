@@ -35,6 +35,6 @@ class MainPagingAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder =
         RecipeViewHolder(
-            RecipeItemBinding.inflate(LayoutInflater.from(parent.context))
+            RecipeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
 }

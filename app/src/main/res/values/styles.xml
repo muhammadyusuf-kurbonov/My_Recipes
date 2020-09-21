@@ -16,7 +16,6 @@
     </style>
 
     <style name="CardView.RecipeCard">
-        <item name="android:elevation">5dp</item>
-        <item name="android:layout_margin">3dp</item>
+        <item name="android:elevation">15dp</item>
     </style>
 </resources>

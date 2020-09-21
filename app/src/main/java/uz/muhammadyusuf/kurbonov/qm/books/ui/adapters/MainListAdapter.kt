@@ -28,6 +28,6 @@ class MainListAdapter :
         viewType: Int
     ): MainPagingAdapter.RecipeViewHolder =
         MainPagingAdapter.RecipeViewHolder(
-            RecipeItemBinding.inflate(LayoutInflater.from(parent.context))
+            RecipeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
 }

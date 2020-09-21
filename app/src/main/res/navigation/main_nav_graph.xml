@@ -8,5 +8,14 @@
         android:id="@+id/mainViewFragment"
         android:name="uz.muhammadyusuf.kurbonov.qm.books.ui.fragment.MainViewFragment"
         android:label="fragment_main_view"
-        tools:layout="@layout/fragment_main_view" />
+        tools:layout="@layout/fragment_main_view">
+        <action
+            android:id="@+id/action_mainViewFragment_to_addRecipeFragment"
+            app:destination="@id/addRecipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addRecipeFragment"
+        android:name="uz.muhammadyusuf.kurbonov.qm.books.ui.fragment.AddRecipeFragment"
+        android:label="fragment_add_recipe"
+        tools:layout="@layout/fragment_add_recipe" />
 </navigation>

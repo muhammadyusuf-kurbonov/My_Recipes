@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class RecipeModel(
-    @PrimaryKey
-    val id: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val title: String,
     val processDescription: String,
     val author: String,
