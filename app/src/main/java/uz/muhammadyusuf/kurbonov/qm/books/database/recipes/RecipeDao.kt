@@ -1,7 +1,5 @@
-package uz.muhammadyusuf.kurbonov.qm.books.database
+package uz.muhammadyusuf.kurbonov.qm.books.database.recipes
 
-import androidx.paging.DataSource
-import androidx.paging.PagingSource
 import androidx.room.*
 
 @Dao

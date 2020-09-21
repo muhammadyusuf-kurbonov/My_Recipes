@@ -1,10 +1,10 @@
-package uz.muhammadyusuf.kurbonov.qm.books.viewmodel
+package uz.muhammadyusuf.kurbonov.qm.books.viewmodel.main
 
-import androidx.paging.DataSource
 import androidx.paging.PagingSource
-import uz.muhammadyusuf.kurbonov.qm.books.database.RecipeModel
+import uz.muhammadyusuf.kurbonov.qm.books.database.recipes.RecipeModel
+import uz.muhammadyusuf.kurbonov.qm.books.viewmodel.base.BaseRepository
 
-interface Repository {
+interface MainRepository : BaseRepository {
     suspend fun getAllData(): List<RecipeModel>
 
     suspend fun getPagedList(): PagingSource<Int, RecipeModel>

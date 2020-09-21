@@ -1,100 +1,82 @@
 package uz.muhammadyusuf.kurbonov.qm.books
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.runBlocking
-import org.junit.*
-import org.junit.Assert.*
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Test
 import org.junit.runner.RunWith
 import uz.muhammadyusuf.kurbonov.qm.books.database.LocalDatabase
-import uz.muhammadyusuf.kurbonov.qm.books.database.RecipeModel
-import java.util.*
+import uz.muhammadyusuf.kurbonov.qm.books.database.recipes.RecipeModel
+import uz.muhammadyusuf.kurbonov.qm.books.viewmodel.main.MainViewModel
 
 @RunWith(AndroidJUnit4::class)
-class RoomTest {
+class MainLogicTest {
 
-    lateinit var db: LocalDatabase
+    lateinit var mainViewModel: MainViewModel
 
     @Before
-    fun initialize(){
-        db = Room.inMemoryDatabaseBuilder(
-            InstrumentationRegistry.getInstrumentation().context,
-            LocalDatabase::class.java
-        ).build()
+    fun initialize() {
+        mainViewModel = MainViewModel()
+        mainViewModel.initDatabase(InstrumentationRegistry.getInstrumentation().context, true)
     }
 
-
-    fun testInsert(){
-
-
-        var recipe = RecipeModel(
-            0,
-            "First",
-            "Lorem",
-            "Androider",
-            "http://google.com/img?example",
-            listOf("Honey", "Tomato", "Potato")
-        )
+    @Test
+    fun testInsert() {
         runBlocking {
+            mainViewModel.generateFakeData(150)
 
-            if (db.recipeDao().getAllDirect().isNotEmpty()) return@runBlocking
-
-            for (i in 0 until 100){
-
-                db.recipeDao().insert(recipe)
-
-                recipe = RecipeModel(
-                    i+1,
-                    UUID.randomUUID().toString(),
-                    "",
-                    "Androider",
-                    "http://google.com/img?example",
-                    listOf("Honey", "Tomato", "Potato")
-                )
-            }
+            assertEquals(150, mainViewModel.repository.getAllData().size)
         }
     }
 
     @Test
-    fun testRead(){
-        testInsert()
+    fun testReading() {
         runBlocking {
-            val result = db.getAllData()
-            assertEquals(100, result.size)
+            (mainViewModel.repository as LocalDatabase).clearAllTables()
+            mainViewModel.generateFakeData(150)
+            assertEquals(150, mainViewModel.repository.getAllData().size)
+        }
+    }
+
+    @Test
+    fun testUpdate() {
+        runBlocking {
+            val newRecipe = RecipeModel(
+                1,
+                "Тортики",
+                "Lorem ipsum",
+                "Androider",
+                "http://link.google.com",
+                listOf("Potato", "Good luck")
+            )
+            mainViewModel.repository.update(newRecipe)
+
+            assertEquals(
+                newRecipe,
+                mainViewModel.repository.getRecipe(1)
+            )
         }
     }
 
     @Test
     fun testPaging(){
         runBlocking {
-
-            testInsert()
-
-            val source = db.getPagedList()
-
-            val pager = Pager(
-                PagingConfig(10),
-                pagingSourceFactory = {
-                    source
+            mainViewModel.allPagedData.collect {
+                it.filterSync {
+                    println()
+                    true
                 }
-            )
-            println("Starting...")
-
-            pager.flow.collect {
-                println(it)
             }
-
-            println("Ending ...")
-            assert(true)
         }
     }
 
+
     @After
     fun close(){
-        db.close()
+        mainViewModel
     }
 }

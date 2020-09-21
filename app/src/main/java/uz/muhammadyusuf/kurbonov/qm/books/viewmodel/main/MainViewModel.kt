@@ -1,46 +1,50 @@
-package uz.muhammadyusuf.kurbonov.qm.books.viewmodel
+package uz.muhammadyusuf.kurbonov.qm.books.viewmodel.main
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.PagingSource
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import uz.muhammadyusuf.kurbonov.qm.books.database.LocalDatabase
-import uz.muhammadyusuf.kurbonov.qm.books.database.RecipeModel
+import uz.muhammadyusuf.kurbonov.qm.books.database.recipes.RecipeModel
 import java.util.*
 
 class MainViewModel: ViewModel() {
 
-    lateinit var repository: Repository
+    lateinit var repository: MainRepository
 
-    fun initDatabase(context: Context){
+    fun initDatabase(context: Context, debug: Boolean = false) {
         repository = Room.databaseBuilder(context, LocalDatabase::class.java, "main.db")
             .build()
+
+        if (debug) {
+            repository = Room.inMemoryDatabaseBuilder(context, LocalDatabase::class.java)
+                .build()
+        }
     }
 
-    val allPagedData = liveData {
+    val allPagedData = flow {
 
         val source = repository.getPagedList()
 
         val pager = Pager(
             PagingConfig(10),
-            pagingSourceFactory = {
-                source
-            }
+            pagingSourceFactory = { source }
         )
 
-        pager.flow.collect {
-            emit(it)
-        }
+        emitAll(pager.flow)
     }
 
-    fun generateFakeData(){
+    /**
+     *  Only for Testing!
+     *
+     * */
+
+    fun generateFakeData(count: Int = 25) {
         var recipe = RecipeModel(
             0,
             "First",
@@ -53,12 +57,12 @@ class MainViewModel: ViewModel() {
 
             if (repository.getAllData().isNotEmpty()) return@launch
 
-            for (i in 0 until 25){
+            for (i in 0 until count) {
 
                 repository.insertNew(recipe)
 
                 recipe = RecipeModel(
-                    i+1,
+                    i + 1,
                     UUID.randomUUID().toString(),
                     "",
                     "Androider",

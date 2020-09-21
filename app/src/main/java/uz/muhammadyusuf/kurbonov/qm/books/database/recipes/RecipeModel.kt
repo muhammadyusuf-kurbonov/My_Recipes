@@ -1,4 +1,4 @@
-package uz.muhammadyusuf.kurbonov.qm.books.database
+package uz.muhammadyusuf.kurbonov.qm.books.database.recipes
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

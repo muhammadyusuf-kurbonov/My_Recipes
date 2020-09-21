@@ -1,16 +1,20 @@
 package uz.muhammadyusuf.kurbonov.qm.books.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import uz.muhammadyusuf.kurbonov.qm.books.ui.adapters.MainRecyclerAdapter
 import uz.muhammadyusuf.kurbonov.qm.books.R
 import uz.muhammadyusuf.kurbonov.qm.books.databinding.FragmentMainViewBinding
-import uz.muhammadyusuf.kurbonov.qm.books.viewmodel.MainViewModel
+import uz.muhammadyusuf.kurbonov.qm.books.ui.adapters.MainRecyclerAdapter
+import uz.muhammadyusuf.kurbonov.qm.books.viewmodel.main.MainViewModel
 
 
 /**
@@ -22,6 +26,10 @@ class MainViewFragment : Fragment(R.layout.fragment_main_view) {
 
     private val viewModel by viewModels<MainViewModel>()
 
+    companion object {
+        private val TAG = "MainFragment"
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = MainRecyclerAdapter()
@@ -29,14 +37,31 @@ class MainViewFragment : Fragment(R.layout.fragment_main_view) {
         viewModel.initDatabase(requireContext())
         viewModel.generateFakeData()
 
-        viewModel.allPagedData.observe(viewLifecycleOwner){
-            lifecycleScope.launch {
+        val binding = FragmentMainViewBinding.bind(view)
+
+        binding.mainList.layoutManager = LinearLayoutManager(requireContext(), VERTICAL, false)
+        binding.mainList.requestLayout()
+
+
+        lifecycleScope.launch {
+            Log.d(TAG, "launched coroutine for paging data load")
+            viewModel.allPagedData.collect {
+                Log.d(TAG, "onViewCreated: Starting collecting data")
                 adapter.submitData(it)
+                adapter.notifyDataSetChanged()
+                binding.mainList.adapter = adapter
             }
         }
 
-        val binding = FragmentMainViewBinding.bind(view)
-        binding.mainList.adapter = adapter
-        binding.mainList.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.btnManualTest.setOnClickListener {
+            lifecycleScope.launch {
+                val data = viewModel.repository.getAllData()
+                Toast.makeText(requireContext(), "Size of data is ${data.size}", Toast.LENGTH_SHORT)
+                    .show()
+
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 }

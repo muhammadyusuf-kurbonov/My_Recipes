@@ -1,4 +1,6 @@
 package uz.muhammadyusuf.kurbonov.qm.books
 
-class RecipesApp {
-}
+import android.app.Application
+
+@Suppress("unused")
+class RecipesApp : Application()
