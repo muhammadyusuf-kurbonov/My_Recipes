@@ -1,0 +1,21 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="TextAppearance.AppCompat.ChipText">
+        <item name="android:textSize">@dimen/chip_text_size</item>
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:padding">@dimen/text_padding</item>
+        <item name="android:radius">25dp</item>
+    </style>
+
+    <style name="CardView.RecipeCard">
+        <item name="android:background">@color/default_background_color</item>
+    </style>
+</resources>
