@@ -9,13 +9,13 @@ import kotlinx.android.synthetic.main.recipe_item.view.*
 import uz.muhammadyusuf.kurbonov.qm.books.database.recipes.RecipeModel
 import uz.muhammadyusuf.kurbonov.qm.books.databinding.RecipeItemBinding
 
-class MainRecyclerAdapter :
-    PagingDataAdapter<RecipeModel, MainRecyclerAdapter.RecipeViewHolder>(DiffResolver()) {
+class MainPagingAdapter :
+    PagingDataAdapter<RecipeModel, MainPagingAdapter.RecipeViewHolder>(DiffResolver()) {
 
 
     class RecipeViewHolder(itemView: RecipeItemBinding) : RecyclerView.ViewHolder(itemView.root)
 
-    private class DiffResolver : DiffUtil.ItemCallback<RecipeModel>() {
+    class DiffResolver : DiffUtil.ItemCallback<RecipeModel>() {
         override fun areItemsTheSame(oldItem: RecipeModel, newItem: RecipeModel): Boolean =
             oldItem.id == newItem.id
 

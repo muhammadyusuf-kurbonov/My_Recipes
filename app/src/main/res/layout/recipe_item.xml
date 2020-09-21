@@ -1,57 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/CardView.RecipeCard"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/card_padding"
-    android:padding="@dimen/card_padding"
-    app:cardBackgroundColor="@color/default_background_color"
-    app:cardCornerRadius="@dimen/card_radius"
-    app:contentPadding="@dimen/card_padding">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
+        style="@style/CardView.RecipeCard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_margin="5dp"
+        app:cardCornerRadius="@dimen/card_radius"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="@dimen/card_padding">
 
-        <ImageView
-            android:id="@+id/img"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/recipe_img_description"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/text_padding"
-            android:paddingEnd="@dimen/text_padding"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            tools:text="@tools:sample/lorem" />
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/recipe_img_description"
+                app:srcCompat="@mipmap/ic_launcher_round" />
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/text_padding"
+                android:paddingEnd="@dimen/text_padding"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                tools:text="@tools:sample/lorem" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/tags"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:chipSpacing="@dimen/card_padding">
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <com.google.android.material.chip.Chip
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/tags"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    app:chipSurfaceColor="@color/colorAccent"
-                    tools:text="@string/hello_blank_fragment" />
+                    android:layout_height="match_parent"
+                    app:chipSpacing="@dimen/card_padding">
 
-            </com.google.android.material.chip.ChipGroup>
-        </HorizontalScrollView>
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        app:chipSurfaceColor="@color/colorAccent"
+                        tools:text="@string/hello_blank_fragment" />
 
-    </LinearLayout>
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
 
-</com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</FrameLayout>

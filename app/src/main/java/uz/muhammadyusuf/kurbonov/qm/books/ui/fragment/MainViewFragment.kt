@@ -9,11 +9,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import uz.muhammadyusuf.kurbonov.qm.books.R
 import uz.muhammadyusuf.kurbonov.qm.books.databinding.FragmentMainViewBinding
-import uz.muhammadyusuf.kurbonov.qm.books.ui.adapters.MainRecyclerAdapter
+import uz.muhammadyusuf.kurbonov.qm.books.ui.adapters.MainListAdapter
 import uz.muhammadyusuf.kurbonov.qm.books.viewmodel.main.MainViewModel
 
 
@@ -27,12 +26,12 @@ class MainViewFragment : Fragment(R.layout.fragment_main_view) {
     private val viewModel by viewModels<MainViewModel>()
 
     companion object {
-        private val TAG = "MainFragment"
+        private const val TAG = "MainFragment"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = MainRecyclerAdapter()
+        val adapter = MainListAdapter()
 
         viewModel.initDatabase(requireContext())
         viewModel.generateFakeData()
@@ -40,17 +39,13 @@ class MainViewFragment : Fragment(R.layout.fragment_main_view) {
         val binding = FragmentMainViewBinding.bind(view)
 
         binding.mainList.layoutManager = LinearLayoutManager(requireContext(), VERTICAL, false)
+        binding.mainList.adapter = adapter
         binding.mainList.requestLayout()
 
 
         lifecycleScope.launch {
             Log.d(TAG, "launched coroutine for paging data load")
-            viewModel.allPagedData.collect {
-                Log.d(TAG, "onViewCreated: Starting collecting data")
-                adapter.submitData(it)
-                adapter.notifyDataSetChanged()
-                binding.mainList.adapter = adapter
-            }
+            adapter.submitList(viewModel.repository.getAllData())
         }
 
 
