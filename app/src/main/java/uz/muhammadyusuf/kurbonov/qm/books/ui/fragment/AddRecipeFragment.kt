@@ -17,6 +17,7 @@ import uz.muhammadyusuf.kurbonov.qm.books.database.TypeConverters
 import uz.muhammadyusuf.kurbonov.qm.books.database.recipes.RecipeModel
 import uz.muhammadyusuf.kurbonov.qm.books.databinding.FragmentAddRecipeBinding
 import uz.muhammadyusuf.kurbonov.qm.books.viewmodel.main.MainViewModel
+import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -46,7 +47,7 @@ class AddRecipeFragment : DialogFragment() {
             )
             model.repository.getAllDataDirect().forEach {
                 ingredientsList.addAll(it.ingredients.map { ingredient ->
-                    ingredient.trim()
+                    ingredient.trim().capitalize(Locale.ROOT)
                 })
             }
             val newIngredientsList = ingredientsList.distinct()
@@ -71,7 +72,9 @@ class AddRecipeFragment : DialogFragment() {
                         binding.evDescription.text.toString(),
                         "Androider",
                         "",
-                        TypeConverters().stringToList(binding.evIngredients.text.toString())
+                        TypeConverters().stringToList(
+                            binding.evIngredients.text.toString().trimEnd(',', ' ', ';', '.')
+                        )
                     )
                 )
             }
