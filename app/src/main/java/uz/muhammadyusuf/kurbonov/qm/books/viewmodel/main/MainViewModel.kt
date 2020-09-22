@@ -85,6 +85,7 @@ class MainViewModel: ViewModel() {
 
     fun goHomFragment() {
         navController.popBackStack(R.id.mainViewFragment, false)
+        activityBroadcast.postValue(HIDE_KEYBOARD)
     }
 
 

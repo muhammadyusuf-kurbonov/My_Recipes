@@ -48,7 +48,7 @@ class AddRecipeFragment : DialogFragment() {
         binding.evIngredients.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
 
         binding.btnCancel.setOnClickListener {
-            model.navController.popBackStack()
+            model.goHomFragment()
         }
         binding.btnSave.setOnClickListener {
             model.viewModelScope.launch {
@@ -63,7 +63,7 @@ class AddRecipeFragment : DialogFragment() {
                     )
                 )
             }
-            model.navController.popBackStack()
+            model.goHomFragment()
         }
     }
 
