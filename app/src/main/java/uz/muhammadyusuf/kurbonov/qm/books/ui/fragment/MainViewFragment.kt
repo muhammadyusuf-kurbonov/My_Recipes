@@ -38,7 +38,6 @@ class MainViewFragment : Fragment(R.layout.fragment_main_view) {
         val linearLayoutManager = LinearLayoutManager(requireContext(), VERTICAL, false)
         binding.mainList.layoutManager = linearLayoutManager
         binding.mainList.adapter = adapter
-        binding.mainList.requestLayout()
 
 
         lifecycleScope.launch {
@@ -51,7 +50,15 @@ class MainViewFragment : Fragment(R.layout.fragment_main_view) {
                     binding.mainList.visibility = VISIBLE
                     binding.emptier.emptyView.visibility = GONE
                 }
+                adapter.onClickListener = { id ->
+                    viewModel.navController.navigate(
+                        MainViewFragmentDirections.actionMainViewFragmentToDetailsFragment(
+                            id
+                        )
+                    )
+                }
                 adapter.submitList(it)
+                view.requestLayout()
             }
         }
 

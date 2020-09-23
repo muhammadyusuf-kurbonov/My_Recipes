@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_mainViewFragment_to_addRecipeFragment"
             app:destination="@id/addRecipeFragment" />
+        <action
+            android:id="@+id/action_mainViewFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/addRecipeFragment"
@@ -26,5 +29,13 @@
         <action
             android:id="@+id/action_fullscreenFragment_to_mainViewFragment"
             app:destination="@id/mainViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="uz.muhammadyusuf.kurbonov.qm.books.ui.fragment.DetailsFragment"
+        android:label="DetailsFragment">
+        <argument
+            android:name="mealId"
+            app:argType="integer" />
     </fragment>
 </navigation>

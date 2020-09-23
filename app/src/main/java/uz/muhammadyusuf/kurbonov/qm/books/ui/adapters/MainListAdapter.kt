@@ -20,6 +20,11 @@ class MainListAdapter :
                 chip.text = it
                 tags.addView(chip)
             }
+            if (onClickListener != null) {
+                card.setOnClickListener {
+                    onClickListener?.invoke(recipe.id)
+                }
+            }
         }
     }
 
@@ -30,4 +35,6 @@ class MainListAdapter :
         MainPagingAdapter.RecipeViewHolder(
             RecipeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
+
+    var onClickListener: ((id: Int) -> Unit)? = null
 }

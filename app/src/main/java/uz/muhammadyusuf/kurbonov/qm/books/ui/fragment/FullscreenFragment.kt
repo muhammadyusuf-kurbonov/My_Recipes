@@ -53,7 +53,7 @@ class FullscreenFragment : Fragment() {
         (activity as AppCompatActivity?)?.supportActionBar?.show()
         activity?.actionBar?.show()
         // Clear the systemUiVisibility flag
-        activity?.window?.decorView?.systemUiVisibility = 0
+        view?.systemUiVisibility = 0
     }
 
 }
