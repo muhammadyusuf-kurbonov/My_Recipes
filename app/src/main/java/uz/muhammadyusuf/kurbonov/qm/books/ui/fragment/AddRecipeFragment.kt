@@ -1,10 +1,12 @@
 package uz.muhammadyusuf.kurbonov.qm.books.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Filter
 import android.widget.MultiAutoCompleteTextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -26,7 +28,7 @@ import java.util.*
  */
 class AddRecipeFragment : DialogFragment() {
 
-    val model: MainViewModel by activityViewModels()
+    private val model: MainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,8 +56,7 @@ class AddRecipeFragment : DialogFragment() {
             ingredientsList.clear()
             ingredientsList.addAll(newIngredientsList)
             val adapter =
-                ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1)
-            adapter.addAll(ingredientsList)
+                IngredientsAdapter(requireContext(), ingredientsList)
             binding.evIngredients.setAdapter(adapter)
         }
         binding.evIngredients.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
@@ -88,5 +89,43 @@ class AddRecipeFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_add_recipe, container, false)
+    }
+
+    private class IngredientsAdapter(context: Context, val list: List<String>) :
+        ArrayAdapter<String>(context, android.R.layout.simple_list_item_1) {
+        override fun getFilter(): Filter {
+            return object : Filter() {
+                override fun performFiltering(constraint: CharSequence?): FilterResults {
+
+                    return constraint?.run {
+                        val suggestions = mutableListOf<String>()
+                        list.forEach {
+                            if (it.toLowerCase(Locale.ROOT)
+                                    .contains(constraint.toString().toLowerCase(Locale.ROOT))
+                            ) {
+                                suggestions.add(it)
+                            }
+                        }
+                        val result = FilterResults()
+                        result.apply {
+                            count = suggestions.size
+                            values = suggestions
+                        }
+                    } ?: FilterResults()
+                }
+
+                override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+
+                    results?.let {
+                        clear()
+                        if (results.count > 0) {
+                            (results.values as ArrayList<*>).forEach {
+                                add(it.toString())
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

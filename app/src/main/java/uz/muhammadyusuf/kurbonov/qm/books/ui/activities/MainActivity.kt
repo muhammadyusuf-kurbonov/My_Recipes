@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
 
 
         model.initDatabase(this)
-        model.generateFakeData()
 
         model.navController =
             (supportFragmentManager.findFragmentById(R.id.fragment) as NavHostFragment).navController
@@ -36,5 +35,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        model.navController.popBackStack(R.id.fullscreenFragment, false)
     }
 }

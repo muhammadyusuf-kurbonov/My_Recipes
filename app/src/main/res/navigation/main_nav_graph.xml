@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
-    app:startDestination="@id/mainViewFragment">
+    app:startDestination="@id/fullscreenFragment">
     <fragment
         android:id="@+id/mainViewFragment"
         android:name="uz.muhammadyusuf.kurbonov.qm.books.ui.fragment.MainViewFragment"
@@ -18,4 +18,13 @@
         android:name="uz.muhammadyusuf.kurbonov.qm.books.ui.fragment.AddRecipeFragment"
         android:label="fragment_add_recipe"
         tools:layout="@layout/fragment_add_recipe" />
+    <fragment
+        android:id="@+id/fullscreenFragment"
+        android:name="uz.muhammadyusuf.kurbonov.qm.books.ui.fragment.FullscreenFragment"
+        android:label="fragment_launcher"
+        tools:layout="@layout/fragment_launcher">
+        <action
+            android:id="@+id/action_fullscreenFragment_to_mainViewFragment"
+            app:destination="@id/mainViewFragment" />
+    </fragment>
 </navigation>

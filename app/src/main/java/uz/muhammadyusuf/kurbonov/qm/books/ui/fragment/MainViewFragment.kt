@@ -3,6 +3,8 @@ package uz.muhammadyusuf.kurbonov.qm.books.ui.fragment
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -42,6 +44,13 @@ class MainViewFragment : Fragment(R.layout.fragment_main_view) {
         lifecycleScope.launch {
             Log.d(TAG, "launched coroutine for paging data load")
             viewModel.repository.listenAllData().observe(viewLifecycleOwner) {
+                if (it.isEmpty()) {
+                    binding.mainList.visibility = GONE
+                    binding.emptier.emptyView.visibility = VISIBLE
+                } else {
+                    binding.mainList.visibility = VISIBLE
+                    binding.emptier.emptyView.visibility = GONE
+                }
                 adapter.submitList(it)
             }
         }
@@ -50,5 +59,6 @@ class MainViewFragment : Fragment(R.layout.fragment_main_view) {
         binding.floatingActionButton.setOnClickListener {
             viewModel.navController.navigate(R.id.addRecipeFragment)
         }
+
     }
 }

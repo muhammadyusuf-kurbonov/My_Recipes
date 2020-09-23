@@ -1,10 +1,12 @@
 <resources>
-    <string name="app_name">My Recipes</string>
+    <string name="app_name">My Menu</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="recipe_img_description">Recipe preview</string>
-    <string name="add_new_recipe">Add new recipe</string>
-    <string name="title">Title</string>
-    <string name="ingredients">Ingredients</string>
+    <string name="add_new_recipe">Add new meal</string>
+    <string name="title">Name</string>
     <string name="save">Save</string>
+    <string name="developer_sign">Developed by Muhammadyusuf Kurbonov</string>
+    <string name="empty">No data yet</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="description">Description</string>
 </resources>
