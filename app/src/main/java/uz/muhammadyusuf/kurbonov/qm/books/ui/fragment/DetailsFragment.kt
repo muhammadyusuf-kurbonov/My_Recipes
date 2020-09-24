@@ -39,7 +39,6 @@ class DetailsFragment : Fragment() {
             val id = DetailsFragmentArgs.fromBundle(requireArguments()).mealId
             val recipe = model.repository.getRecipe(id)
             binding.toolbar.title = recipe.title
-            binding.toolbar.setTitleTextColor(Color.WHITE)
             supportActionBar?.hide()
 
             Picasso.get()
