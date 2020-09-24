@@ -61,24 +61,59 @@ class AddRecipeFragment : DialogFragment() {
         }
         binding.evIngredients.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
 
-        binding.btnCancel.setOnClickListener {
-            model.goHomFragment()
-        }
-        binding.btnSave.setOnClickListener {
-            model.viewModelScope.launch {
-                model.repository.insertNew(
-                    RecipeModel(
-                        0,
-                        binding.evTitle.text.toString(),
-                        binding.evDescription.text.toString(),
-                        "Androider",
-                        "",
-                        TypeConverters().stringToList(
-                            binding.evIngredients.text.toString().trimEnd(',', ' ', ';', '.')
+        lateinit var submitFunction: (v: View) -> Unit
+
+        val mealId = AddRecipeFragmentArgs.fromBundle(requireArguments()).mealId
+        if (mealId < 0) {
+            submitFunction = {
+                model.viewModelScope.launch {
+                    model.repository.insertNew(
+                        RecipeModel(
+                            0,
+                            binding.evTitle.text.toString(),
+                            binding.evDescription.text.toString(),
+                            "Androider",
+                            "",
+                            TypeConverters().stringToList(
+                                binding.evIngredients.text.toString().trimEnd(',', ' ', ';', '.')
+                            )
                         )
                     )
-                )
+                }
+                model.goHomFragment()
             }
+        } else {
+            lifecycleScope.launch {
+                val recipe = model.repository.getRecipe(mealId)
+                with(binding) {
+                    tvTitle.text = getString(R.string.update_title, recipe.title)
+                    btnSave.text = getString(R.string.update_caption)
+
+                    evTitle.setText(recipe.title)
+                    evDescription.setText(recipe.processDescription)
+                    evIngredients.setText(TypeConverters().listToString(recipe.ingredients))
+                }
+            }
+            submitFunction = {
+                model.viewModelScope.launch {
+                    model.repository.update(
+                        RecipeModel(
+                            mealId,
+                            binding.evTitle.text.toString(),
+                            binding.evDescription.text.toString(),
+                            "Androider",
+                            "",
+                            TypeConverters().stringToList(
+                                binding.evIngredients.text.toString().trimEnd(',', ' ', ';', '.')
+                            )
+                        )
+                    )
+                }
+                model.goHomFragment()
+            }
+        }
+        binding.btnSave.setOnClickListener(submitFunction)
+        binding.btnCancel.setOnClickListener {
             model.goHomFragment()
         }
     }

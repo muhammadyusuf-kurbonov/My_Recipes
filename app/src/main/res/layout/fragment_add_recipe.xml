@@ -8,6 +8,7 @@
     tools:context=".ui.fragment.AddRecipeFragment">
 
     <TextView
+        android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/text_padding"

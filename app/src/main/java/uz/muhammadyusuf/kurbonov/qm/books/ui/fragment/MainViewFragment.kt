@@ -10,7 +10,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
-import kotlinx.coroutines.launch
 import uz.muhammadyusuf.kurbonov.qm.books.R
 import uz.muhammadyusuf.kurbonov.qm.books.databinding.FragmentMainViewBinding
 import uz.muhammadyusuf.kurbonov.qm.books.ui.adapters.MainListAdapter
@@ -37,24 +36,32 @@ class MainViewFragment : Fragment(R.layout.fragment_main_view) {
 
         val linearLayoutManager = LinearLayoutManager(requireContext(), VERTICAL, false)
         binding.mainList.layoutManager = linearLayoutManager
-        binding.mainList.adapter = adapter
-        binding.mainList.requestLayout()
 
+        viewModel.repository.listenAllData().observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.mainList.visibility = GONE
+                binding.emptier.emptyView.visibility = VISIBLE
+            } else {
+                binding.mainList.visibility = VISIBLE
+                binding.emptier.emptyView.visibility = GONE
+            }
 
-        lifecycleScope.launch {
-            Log.d(TAG, "launched coroutine for paging data load")
-            viewModel.repository.listenAllData().observe(viewLifecycleOwner) {
-                if (it.isEmpty()) {
-                    binding.mainList.visibility = GONE
-                    binding.emptier.emptyView.visibility = VISIBLE
-                } else {
-                    binding.mainList.visibility = VISIBLE
-                    binding.emptier.emptyView.visibility = GONE
-                }
-                adapter.submitList(it)
+            adapter.onClickListener = { id ->
+                viewModel.navController.navigate(
+                    MainViewFragmentDirections.actionMainViewFragmentToDetailsFragment(
+                        id
+                    )
+                )
+            }
+            Log.d(TAG, "onViewCreated: data is ${it.size} long")
+
+            adapter.submitList(it)
+            lifecycleScope.launchWhenResumed {
+                adapter.notifyDataSetChanged()
             }
         }
 
+        binding.mainList.adapter = adapter
 
         binding.floatingActionButton.setOnClickListener {
             viewModel.navController.navigate(R.id.addRecipeFragment)

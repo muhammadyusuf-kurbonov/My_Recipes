@@ -19,5 +19,7 @@ interface MainRepository : BaseRepository {
 
     suspend fun getRecipe(id: Int): RecipeModel
 
+    suspend fun delete(id: Int)
+
     fun listenAllData(): LiveData<List<RecipeModel>>
 }

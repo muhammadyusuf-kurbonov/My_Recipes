@@ -13,7 +13,7 @@ class MainPagingAdapter :
     PagingDataAdapter<RecipeModel, MainPagingAdapter.RecipeViewHolder>(DiffResolver()) {
 
 
-    class RecipeViewHolder(itemView: RecipeItemBinding) : RecyclerView.ViewHolder(itemView.root)
+    class RecipeViewHolder(val binding: RecipeItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     class DiffResolver : DiffUtil.ItemCallback<RecipeModel>() {
         override fun areItemsTheSame(oldItem: RecipeModel, newItem: RecipeModel): Boolean =
@@ -22,8 +22,6 @@ class MainPagingAdapter :
 
         override fun areContentsTheSame(oldItem: RecipeModel, newItem: RecipeModel): Boolean =
             oldItem == newItem
-
-
     }
 
     override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {

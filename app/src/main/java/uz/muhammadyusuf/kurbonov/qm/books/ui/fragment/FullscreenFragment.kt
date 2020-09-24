@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package uz.muhammadyusuf.kurbonov.qm.books.ui.fragment
 
 import android.os.Bundle
@@ -39,7 +41,7 @@ class FullscreenFragment : Fragment() {
         lifecycleScope.launch {
             delay(1500)
             val model by activityViewModels<MainViewModel>()
-            model.navController.navigate(R.id.mainViewFragment)
+            model.navController.navigate(FullscreenFragmentDirections.actionFullscreenFragmentToMainViewFragment())
         }
 
         // Trigger the initial hide() shortly after the activity has been
@@ -53,7 +55,7 @@ class FullscreenFragment : Fragment() {
         (activity as AppCompatActivity?)?.supportActionBar?.show()
         activity?.actionBar?.show()
         // Clear the systemUiVisibility flag
-        activity?.window?.decorView?.systemUiVisibility = 0
+        view?.systemUiVisibility = 0
     }
 
 }

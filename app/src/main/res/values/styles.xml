@@ -18,4 +18,13 @@
     <style name="CardView.RecipeCard">
         <item name="android:elevation">15dp</item>
     </style>
+
+    <style name="TextAppearance.AppCompat.ToolbarText.Expanded" parent="TextAppearance.AppCompat.Display1">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+
+    <style name="TextAppearance.AppCompat.ToolbarText.Collapsed" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 </resources>
