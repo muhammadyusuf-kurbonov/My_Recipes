@@ -104,4 +104,6 @@
     <string name="update_title">Update %1s</string>
     <string name="update_caption">Update</string>
     <string name="edit_caption">Edit</string>
+    <string name="select_image_caption">Select image</string>
+    <string name="change_image_caption">Change Image</string>
 </resources>

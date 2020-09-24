@@ -49,7 +49,7 @@ class DetailsFragment : Fragment() {
             }
 
             Picasso.get()
-                .load("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQzCogtFg0-5rC5Q8SFLkzuSgp5ULeX78c5sA&usqp=CAU")
+                .load(recipe.imageLink)
                 .placeholder(R.drawable.ic_baseline_sync_24)
                 .error(ColorDrawable(Color.parseColor("#FFC107")))
                 .into(binding.appBarImage)
