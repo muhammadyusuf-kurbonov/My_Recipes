@@ -101,4 +101,7 @@
     <string name="delete_caption">Delete from menu</string>
     <string name="confirm_message">Are you sure to delete this meal from menu?</string>
     <string name="confirm_title">Confirm delete</string>
+    <string name="update_title">Update %1s</string>
+    <string name="update_caption">Update</string>
+    <string name="edit_caption">Edit</string>
 </resources>

@@ -55,6 +55,12 @@ class DetailsFragment : Fragment() {
                 .into(binding.appBarImage)
         }
 
+        binding.btnEdit.setOnClickListener {
+            model.navController.navigate(
+                DetailsFragmentDirections.actionDetailsFragmentToAddRecipeFragment().also {
+                    it.mealId = mealId
+                })
+        }
         binding.btnDelete.setOnClickListener {
             AlertDialog.Builder(requireContext())
                 .setMessage(getString(R.string.confirm_message))
