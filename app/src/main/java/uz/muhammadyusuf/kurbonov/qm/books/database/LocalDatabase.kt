@@ -34,6 +34,9 @@ abstract class LocalDatabase : MainRepository, RoomDatabase() {
     override suspend fun getRecipe(id: Int): RecipeModel =
         recipeDao().getRecipe(id)
 
+    override suspend fun delete(id: Int) =
+        recipeDao().deleteById(getRecipe(id))
+
     override fun listenAllData(): LiveData<List<RecipeModel>> =
         recipeDao().listenAllData()
 
