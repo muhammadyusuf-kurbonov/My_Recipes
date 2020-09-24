@@ -32,7 +32,7 @@ class DetailsFragment : Fragment() {
     private val model by activityViewModels<MainViewModel>()
     private var supportActionBar: ActionBar? = null
 
-    var mealId: Int = -1
+    private var mealId: Int = -1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
