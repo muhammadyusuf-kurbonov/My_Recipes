@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
 import uz.muhammadyusuf.kurbonov.qm.books.R
@@ -69,9 +68,7 @@ class DetailsFragment : Fragment() {
                 .setMessage(getString(R.string.confirm_message))
                 .setTitle(getString(R.string.confirm_title))
                 .setPositiveButton(android.R.string.ok) { dialog, _ ->
-                    model.viewModelScope.launch {
-                        model.repository.delete(mealId)
-                    }
+                    model.deleteMeal(requireContext(), mealId)
                     dialog.dismiss()
                     model.goHomFragment()
                 }

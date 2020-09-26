@@ -16,6 +16,7 @@ import kotlinx.coroutines.withContext
 import uz.muhammadyusuf.kurbonov.qm.books.R
 import uz.muhammadyusuf.kurbonov.qm.books.database.LocalDatabase
 import uz.muhammadyusuf.kurbonov.qm.books.database.recipes.RecipeModel
+import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.*
@@ -103,5 +104,14 @@ class MainViewModel: ViewModel() {
             }
 
         }
+
+    fun deleteMeal(context: Context, mealId: Int) {
+        viewModelScope.launch {
+            repository.delete(mealId)
+            File(
+                context.filesDir, "mealImg${mealId}.png"
+            ).delete()
+        }
+    }
 
 }
