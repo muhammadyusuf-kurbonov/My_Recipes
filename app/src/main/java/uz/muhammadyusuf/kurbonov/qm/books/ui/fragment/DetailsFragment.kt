@@ -48,6 +48,7 @@ class DetailsFragment : Fragment() {
                 model.navController.popBackStack()
             }
 
+            Picasso.get().isLoggingEnabled = true
             Picasso.get()
                 .load(recipe.imageLink)
                 .placeholder(R.drawable.ic_baseline_sync_24)

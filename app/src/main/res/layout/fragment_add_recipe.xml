@@ -65,7 +65,8 @@
             android:id="@+id/img"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="center" />
+            android:contentDescription="@string/recipe_img_description"
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:layout_width="match_parent"
