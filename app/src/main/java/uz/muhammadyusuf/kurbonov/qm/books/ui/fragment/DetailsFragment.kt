@@ -48,12 +48,14 @@ class DetailsFragment : Fragment() {
                 model.navController.popBackStack()
             }
 
-            Picasso.get().isLoggingEnabled = true
-            Picasso.get()
-                .load(recipe.imageLink)
-                .placeholder(R.drawable.ic_baseline_sync_24)
-                .error(ColorDrawable(Color.parseColor("#FFC107")))
-                .into(binding.appBarImage)
+            if (recipe.imageLink.isNotEmpty()) {
+                Picasso.get().isLoggingEnabled = true
+                Picasso.get()
+                    .load("file://" + recipe.imageLink)
+                    .placeholder(R.drawable.ic_baseline_sync_24)
+                    .error(ColorDrawable(Color.parseColor("#FFC107")))
+                    .into(binding.appBarImage)
+            }
         }
 
         binding.btnEdit.setOnClickListener {

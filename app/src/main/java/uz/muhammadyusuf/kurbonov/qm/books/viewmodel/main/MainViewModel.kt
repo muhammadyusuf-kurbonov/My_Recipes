@@ -8,12 +8,16 @@ import androidx.navigation.NavController
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.room.Room
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import uz.muhammadyusuf.kurbonov.qm.books.R
 import uz.muhammadyusuf.kurbonov.qm.books.database.LocalDatabase
 import uz.muhammadyusuf.kurbonov.qm.books.database.recipes.RecipeModel
+import java.io.InputStream
+import java.io.OutputStream
 import java.util.*
 
 class MainViewModel: ViewModel() {
@@ -88,5 +92,16 @@ class MainViewModel: ViewModel() {
         activityBroadcast.postValue(HIDE_KEYBOARD)
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
+    suspend fun copyFile(fromSource: InputStream, toDestination: OutputStream) =
+        withContext(Dispatchers.IO) {
+            try {
+                fromSource.copyTo(toDestination)
+            } finally {
+                fromSource.close()
+                toDestination.close()
+            }
+
+        }
 
 }

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,11 +21,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import uz.muhammadyusuf.kurbonov.qm.books.R
 import uz.muhammadyusuf.kurbonov.qm.books.database.TypeConverters
 import uz.muhammadyusuf.kurbonov.qm.books.database.recipes.RecipeModel
 import uz.muhammadyusuf.kurbonov.qm.books.databinding.FragmentAddRecipeBinding
 import uz.muhammadyusuf.kurbonov.qm.books.viewmodel.main.MainViewModel
+import java.io.File
 import java.util.*
 
 
@@ -37,6 +40,7 @@ class AddRecipeFragment : DialogFragment() {
 
     companion object {
         const val PICK_IMAGE = 150
+        const val TAG = "ADD Fragment"
     }
 
     private val model: MainViewModel by activityViewModels()
@@ -123,10 +127,14 @@ class AddRecipeFragment : DialogFragment() {
         binding.evIngredients.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
     }
 
+    private var mealId: Int = 0
     private fun setupButtonsOnClickListeners() {
         lateinit var submitFunction: (v: View) -> Unit
 
-        val mealId = AddRecipeFragmentArgs.fromBundle(requireArguments()).mealId
+        mealId = AddRecipeFragmentArgs.fromBundle(requireArguments()).mealId
+        val toDestination =
+            File(requireContext().filesDir, "mealImg${mealId}.png")
+
         if (mealId < 0) {
             submitFunction = {
                 model.viewModelScope.launch {
@@ -136,7 +144,7 @@ class AddRecipeFragment : DialogFragment() {
                             binding.evTitle.text.toString(),
                             binding.evDescription.text.toString(),
                             "Androider",
-                            imageUri?.toString() ?: "",
+                            if (toDestination.exists()) toDestination.absolutePath else "",
                             TypeConverters().stringToList(
                                 binding.evIngredients.text.toString().trimEnd(',', ' ', ';', '.')
                             )
@@ -158,9 +166,11 @@ class AddRecipeFragment : DialogFragment() {
                     evTitle.setText(recipe.title)
                     evDescription.setText(recipe.processDescription)
                     evIngredients.setText(TypeConverters().listToString(recipe.ingredients))
-                    Picasso.get()
-                        .load(recipe.imageLink)
-                        .into(img)
+                    if (recipe.imageLink.isNotEmpty()) {
+                        Picasso.get()
+                            .load(recipe.imageLink)
+                            .into(img)
+                    }
                     btnSelectImage.setText(R.string.change_image_caption)
                 }
             }
@@ -172,7 +182,7 @@ class AddRecipeFragment : DialogFragment() {
                             binding.evTitle.text.toString(),
                             binding.evDescription.text.toString(),
                             "Androider",
-                            imageUri?.toString() ?: "",
+                            if (toDestination.exists()) toDestination.absolutePath else "",
                             TypeConverters().stringToList(
                                 binding.evIngredients.text.toString().trimEnd(',', ' ', ';', '.')
                             )
@@ -182,10 +192,37 @@ class AddRecipeFragment : DialogFragment() {
                 model.goHomFragment()
             }
         }
-        binding.btnSave.setOnClickListener(submitFunction)
+        binding.btnSave.setOnClickListener {
+            model.viewModelScope.launch {
+                initCopyProcess()
+                submitFunction(it)
+            }
+        }
         binding.btnCancel.setOnClickListener {
             model.goHomFragment()
         }
+    }
+
+    @Suppress("BlockingMethodInNonBlockingContext")
+    private suspend fun initCopyProcess() {
+
+        if ((imageUri != null) && (imageUri!!.path != null)) {
+
+            val fromSource =
+                requireContext().contentResolver.openInputStream(imageUri!!)
+            if (fromSource != null) {
+                val destinationFile = requireContext().openFileOutput("mealImg${mealId}.png", 0)
+
+                runBlocking {
+                    model.copyFile(
+                        fromSource,
+                        destinationFile
+                    )
+                }
+            } else
+                Log.d(TAG, "setupButtonsOnClickListeners: File copy failed")
+        }
+
     }
 
     override fun onCreateView(
