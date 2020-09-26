@@ -3,6 +3,7 @@ package uz.muhammadyusuf.kurbonov.qm.books.ui.fragment
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -55,7 +56,18 @@ class DetailsFragment : Fragment() {
                     .error(ColorDrawable(Color.parseColor("#FFC107")))
                     .into(binding.appBarImage)
             }
+
+            var text = "<b>Ingredients: </b>"
+
+            text += recipe.ingredients.joinToString {
+                it
+            }
+
+            @Suppress("DEPRECATION")
+            binding.tvDetails.text = Html.fromHtml(text)
+
         }
+
 
         binding.btnEdit.setOnClickListener {
             model.navController.navigate(
