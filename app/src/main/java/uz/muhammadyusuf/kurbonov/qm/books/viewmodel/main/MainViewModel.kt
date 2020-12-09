@@ -35,53 +35,8 @@ class MainViewModel: ViewModel() {
         }
     }
 
-    val allPagedData = flow {
-
-        val source = repository.getPagedList()
-
-        val pager = Pager(
-            PagingConfig(10),
-            pagingSourceFactory = { source }
-        )
-
-        emitAll(pager.flow)
-    }
-
     val activityBroadcast: MutableLiveData<Int> = MutableLiveData()
 
-    /**
-     *  Only for Testing!
-     *
-     * */
-
-    fun generateFakeData(count: Int = 25) {
-        var recipe = RecipeModel(
-            0,
-            "First",
-            "Lorem",
-            "Androider",
-            "http://google.com/img?example",
-            listOf("Honey", "Tomato", "Potato")
-        )
-        viewModelScope.launch {
-
-            if (repository.getAllDataDirect().isNotEmpty()) return@launch
-
-            for (i in 0 until count) {
-
-                repository.insertNew(recipe)
-
-                recipe = RecipeModel(
-                    i + 1,
-                    UUID.randomUUID().toString(),
-                    "",
-                    "Androider",
-                    "http://google.com/img?example",
-                    listOf("Honey", "Tomato", "Potato")
-                )
-            }
-        }
-    }
 
     fun goHomFragment() {
         navController.popBackStack(R.id.mainViewFragment, false)
